@@ -68,14 +68,40 @@ class Add extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q4. Fetch the passenger details from the add form and call bookTraveller()*/
+    const name = e.target.name.value;
+    const phone = e.target.phone.value;
+    const passenger = { name, phone };
+    if (name == "" || phone == "") {
+      alert("Invalid input");
+      return;
+    }
+    let res = this.props.bookTraveller(passenger);
+    if (res) alert("Passenger added");
   }
 
   render() {
     return (
-      <form name="addTraveller" onSubmit={this.handleSubmit}>
+      <form
+        style={{
+          fontSize: "16px",
+          display: "flex",
+          gap: 10,
+          flexDirection: "column",
+        }}
+        name="addTraveller"
+        onSubmit={this.handleSubmit}
+      >
         {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
-        <input type="text" name="travellername" placeholder="Name" />
-        <button>Add</button>
+        <div>
+          <label htmlFor="name">Name: </label>
+          <input type="text" name="name" placeholder="Name" />
+        </div>
+        <div>
+          <label htmlFor="phone">Phone: </label>
+          <input type="number" name="phone" placeholder="Phone" />
+        </div>
+
+        <button style={{ width: "100px", padding: "10px 4px" }}>Add</button>
       </form>
     );
   }
@@ -143,7 +169,7 @@ class Homepage extends React.Component {
 class TicketToRide extends React.Component {
   constructor() {
     super();
-    this.state = { travellers: [], selector: 1};
+    this.state = { travellers: [], selector: 1, nextId: 3 };
     this.bookTraveller = this.bookTraveller.bind(this);
     this.deleteTraveller = this.deleteTraveller.bind(this);
   }
@@ -167,6 +193,21 @@ class TicketToRide extends React.Component {
 
   bookTraveller(passenger) {
     /*Q4. Write code to add a passenger to the traveller state variable.*/
+    const newTraveller = {
+      id: this.state.nextId,
+      name: passenger.name,
+      phone: passenger.phone,
+      bookingTime: new Date(),
+    };
+    if (this.state.travellers.length >= totalSeat) {
+      alert("All seat has been occupied");
+      return false;
+    }
+    this.setState((prevState) => ({
+      travellers: [...prevState.travellers, newTraveller],
+      nextId: prevState.nextId + 1,
+    }));
+    return true;
   }
 
   deleteTraveller(passenger) {
