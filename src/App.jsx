@@ -116,14 +116,33 @@ class Delete extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
+    if (e.target.id.value == "") {
+      alert("Invalid input");
+      return;
+    }
+    let res = this.props.deleteTraveller(e.target.id.value);
+
+    if (res) alert("Passenger deleted");
   }
 
   render() {
     return (
-      <form name="deleteTraveller" onSubmit={this.handleSubmit}>
+      <form
+        style={{
+          fontSize: "16px",
+          display: "flex",
+          gap: 10,
+          flexDirection: "column",
+        }}
+        name="deleteTraveller"
+        onSubmit={this.handleSubmit}
+      >
         {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-        <input type="text" name="travellername" placeholder="Name" />
-        <button>Delete</button>
+        <div>
+          <label htmlFor="id">Traveller id: </label>
+          <input type="number" name="id" placeholder="Traveller id" />
+        </div>
+        <button style={{ width: "100px", padding: "10px 4px" }}>Delete</button>
       </form>
     );
   }
@@ -210,8 +229,20 @@ class TicketToRide extends React.Component {
     return true;
   }
 
-  deleteTraveller(passenger) {
+  deleteTraveller(id) {
     /*Q5. Write code to delete a passenger from the traveller state variable.*/
+    if (
+      this.state.travellers.findIndex(
+        (traveller) => traveller.id === parseInt(id),
+      ) === -1
+    ) {
+      alert("Passenger not found");
+      return false;
+    }
+    this.setState({
+      travellers: this.state.travellers.filter((i) => i.id !== parseInt(id)),
+    });
+    return true;
   }
   render() {
     return (
