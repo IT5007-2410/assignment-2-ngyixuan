@@ -16,20 +16,30 @@ const initialTravellers = [
 const totalSeat = 10;
 
 function TravellerRow(props) {
-  {/*Q3. Placeholder to initialize local variable based on traveller prop.*/}
+  {
+    /*Q3. Placeholder to initialize local variable based on traveller prop.*/
+  }
+
+  const { id, name, phone, bookingTime } = props.traveller;
   return (
     <tr>
       {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+      <td>{id}</td>
+      <td>{name}</td>
+      <td>{phone}</td>
+      <td>{bookingTime.toLocaleString()}</td>
     </tr>
   );
 }
 
 function Display(props) {
-  
   /*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
 
   return (
-    <table className="bordered-table">
+    <table
+      className="bordered-table"
+      style={{ width: "100%", fontSize: "16px" }}
+    >
       <thead>
         <tr>
           {/*Q3. Below table is just an example. Add more columns based on the traveller attributes you choose.*/}
@@ -41,6 +51,9 @@ function Display(props) {
       </thead>
       <tbody>
         {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
+        {props.travellers.map((traveller) => (
+          <TravellerRow key={traveller.id} traveller={traveller} />
+        ))}
       </tbody>
     </table>
   );
